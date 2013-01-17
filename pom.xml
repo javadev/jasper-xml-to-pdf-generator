@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>jcl104-over-slf4j</artifactId>
+            <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
             <scope>runtime</scope>
         </dependency>
@@ -51,36 +51,11 @@
         <groupId>com.mycila.xmltool</groupId>
         <artifactId>xmltool</artifactId>
         <version>3.3</version>
-        <scope>test</scope>
     </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.name}</finalName>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>src/test/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -92,6 +67,33 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>            
+      <plugin>  
+        <groupId>org.apache.maven.plugins</groupId>  
+        <artifactId>maven-jar-plugin</artifactId>  
+        <version>2.2</version>
+        <configuration>  
+          <archive>  
+            <manifest>  
+              <mainClass>com.github.jasperxmltopdfgenerator.JasperPdfGenerator</mainClass>  
+            </manifest>  
+          </archive>  
+        </configuration>  
+      </plugin> 
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>com.github.jasperxmltopdfgenerator.JasperPdfGenerator</mainClass>
+        </configuration>
+      </plugin>
       <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>

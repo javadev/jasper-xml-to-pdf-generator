@@ -1,14 +1,20 @@
 package com.github.jasperxmltopdfgenerator;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.List;
 
+import com.mycila.xmltool.XMLDoc;
+import com.mycila.xmltool.XMLTag;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -24,17 +30,22 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRPrintPage;
 
 public class JasperPdfGenerator {
+    private XMLTag xmlTag;
 
-    private void createPDFJasper(List<String> templateNames, ByteArrayOutputStream os) {
+    public JasperPdfGenerator() {
+        org.apache.log4j.BasicConfigurator.configure();
+    }
+
+    private void createPDFJasper(List<String> templateNames, String xmlFileName, ByteArrayOutputStream os) {
         List<JasperPrint> jasperPrints = new ArrayList<JasperPrint>();
         InputStream fileIs = null;
         InputStream stringIs = null;
+        xmlTag = XMLDoc.from(new File(xmlFileName), true);
         try {
-            String decodedPath = ".";
             try {
                 for (String templateName : templateNames) {
-                    fileIs = new FileInputStream(decodedPath + "/templates/" + templateNames.get(0));
-                    String contents = applyVelocityTemplate(IOUtils.toString(fileIs, "UTF-8"), decodedPath + "/templates");
+                    fileIs = new FileInputStream(templateNames.get(0));
+                    String contents = applyVelocityTemplate(IOUtils.toString(fileIs, "UTF-8"));
                     stringIs = IOUtils.toInputStream(contents, "UTF-8");
                     JasperReport jasperReport = JasperCompileManager.compileReport(stringIs);
                     jasperPrints.add(JasperFillManager.fillReport(
@@ -59,11 +70,10 @@ public class JasperPdfGenerator {
         }
     }
 
-    private String applyVelocityTemplate(String templateData, String basePath) throws Exception {
+    private String applyVelocityTemplate(String templateData) throws Exception {
         Properties p = new Properties();
         p.setProperty("resource.loader", "string");
         p.setProperty("string.resource.loader.class", "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
-        p.setProperty("userdirective", "");
         Velocity.init(p);
 
         StringResourceRepository repo = StringResourceLoader.getRepository();
@@ -71,10 +81,16 @@ public class JasperPdfGenerator {
         Template template = Velocity.getTemplate("template", "UTF-8");
         StringWriter writer = new StringWriter();
         VelocityContext context = new VelocityContext();
-        context.put("basePath", basePath.replace("\\", "/"));
+        context.put("xml", xmlTag);
         template.merge(context, writer);
         writer.flush();
         writer.close();
         return writer.toString();
+    }
+
+    public static void main(String[] args) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        new JasperPdfGenerator().createPDFJasper(Arrays.asList("application-form-ukr.jrxml"), "in_dossier.xml", os);
+        os.writeTo(new FileOutputStream("application-form-ukr.pdf"));
     }
 }
