@@ -57,11 +57,13 @@ public class JasperPdfGenerator {
         org.apache.log4j.BasicConfigurator.configure();
     }
 
-    private void createPDFJasper(List<String> templateNames, String xmlFileName, ByteArrayOutputStream os) {
+    private void createPDFJasper(List<String> templateNames, List<String> xmlFileNames, ByteArrayOutputStream os) {
         List<JasperPrint> jasperPrints = new ArrayList<JasperPrint>();
         InputStream fileIs = null;
         InputStream stringIs = null;
-        xmlTag = XMLDoc.from(new File(xmlFileName), true);
+        if (!xmlFileNames.isEmpty()) {
+            xmlTag = XMLDoc.from(new File(xmlFileNames.get(0)), true);
+        }
         try {
             try {
                 for (String templateName : templateNames) {
@@ -110,8 +112,25 @@ public class JasperPdfGenerator {
     }
 
     public static void main(String[] args) throws IOException {
+        if (args.length == 0) {
+           System.out.println("Usage: java -jar xmltopdf.jar template.jrxml data.xml");
+           return;
+        }
+        List<String> templates = new ArrayList<String>();
+        List<String> xmls = new ArrayList<String>();
+        for (String arg : args) {
+            if (arg.endsWith(".jrxml")) {
+                templates.add(arg);
+            } else if (arg.endsWith(".xml")) {
+                xmls.add(arg);
+            }
+        }
+        if (templates.isEmpty()) {
+           System.out.println("Usage: java -jar xmltopdf.jar template.jrxml data.xml");
+           return;
+        }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        new JasperPdfGenerator().createPDFJasper(Arrays.asList("application-form-ukr.jrxml"), "in_dossier.xml", os);
-        os.writeTo(new FileOutputStream("application-form-ukr.pdf"));
+        new JasperPdfGenerator().createPDFJasper(templates, xmls, os);
+        os.writeTo(new FileOutputStream(templates.get(0).replaceFirst("\\.jrxml$", ".pdf")));
     }
 }
