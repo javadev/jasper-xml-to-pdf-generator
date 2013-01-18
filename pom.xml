@@ -4,10 +4,10 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github</groupId>
-    <artifactId>jasperxmltopdfgenerator</artifactId>
+    <artifactId>xmltopdf</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version> 
-    <name>jasper-xml-to-pdf-generator</name>
+    <name>xmltopdf</name>
 
     <dependencies>
         <dependency>
@@ -74,7 +74,7 @@
         <configuration>  
           <archive>  
             <manifest>  
-              <mainClass>com.github.jasperxmltopdfgenerator.JasperPdfGenerator</mainClass>  
+              <mainClass>com.github.xmltopdf.JasperPdfGenerator</mainClass>  
             </manifest>  
           </archive>  
         </configuration>  
@@ -91,7 +91,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>com.github.jasperxmltopdfgenerator.JasperPdfGenerator</mainClass>
+          <mainClass>com.github.xmltopdf.JasperPdfGenerator</mainClass>
         </configuration>
       </plugin>
       <plugin>
