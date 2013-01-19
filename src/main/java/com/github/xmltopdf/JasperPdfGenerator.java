@@ -98,6 +98,11 @@ public class JasperPdfGenerator {
         Properties properties = new Properties();
         properties.setProperty("resource.loader", "string");
         properties.setProperty("string.resource.loader.class", "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
+        properties.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogSystem");
+        properties.setProperty("userdirective",
+                "com.github.xmltopdf.MoneyUAHDirective,"
+                + "com.github.xmltopdf.MoneyToStrDirective,"
+                + "com.github.xmltopdf.DateDirective");
         Velocity.init(properties);
 
         StringResourceRepository repo = StringResourceLoader.getRepository();
