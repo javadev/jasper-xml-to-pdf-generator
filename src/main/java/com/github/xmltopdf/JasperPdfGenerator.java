@@ -54,6 +54,8 @@ import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
+import net.sf.jasperreports.engine.export.JRHtmlExporter;
+import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 
 /**.
  * @author Valentyn Kolesnikov
@@ -61,12 +63,12 @@ import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
  */
 public class JasperPdfGenerator {
     private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml";
-    private static Float ZOOM_2X = Float.valueOf(2);
+    private static final Float ZOOM_2X = Float.valueOf(2);
     private XMLTag xmlTag;
 
     /**.*/
     public enum DocType {
-        ODT, PDF, PNG, RTF, XLS;
+        HTML, ODT, PDF, PNG, RTF, XLS;
     }
 
     public JasperPdfGenerator() {
@@ -141,6 +143,17 @@ public class JasperPdfGenerator {
                     exporter.setParameter(JRExporterParameter.PAGE_INDEX, Integer.valueOf(0));
                     exporter.exportReport();
                     ImageIO.write(pageImage, "png", os);
+                    break;
+                case HTML:
+                    JRHtmlExporter htmlExporter = new JRHtmlExporter();
+                    htmlExporter.setParameter(JRHtmlExporterParameter.JASPER_PRINT, jasperPrint);
+                    htmlExporter.setParameter(JRHtmlExporterParameter.OUTPUT_STREAM, os);
+                    htmlExporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "img/");
+                    htmlExporter.setParameter(JRHtmlExporterParameter.IMAGES_DIR, new java.io.File("img"));
+                    htmlExporter.setParameter(JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR, Boolean.TRUE);
+                    htmlExporter.setParameter(JRHtmlExporterParameter.ZOOM_RATIO, ZOOM_2X);
+                    htmlExporter.exportReport();
+                    break;
                 default:
                     break;
             }
@@ -175,7 +188,10 @@ public class JasperPdfGenerator {
         return writer.toString();
     }
 
-    /**.*/
+    /**.
+     * @param args
+     *            the arguments
+     */
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
            LOG.info(null, USAGE);
