@@ -17,6 +17,8 @@
  */
 package com.github.xmltopdf;
 
+import java.awt.image.BufferedImage;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.List;
+import javax.imageio.ImageIO;
 
 import com.mycila.xmltool.XMLDoc;
 import com.mycila.xmltool.XMLTag;
@@ -49,6 +52,8 @@ import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
+import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
+import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
 
 /**.
  * @author Valentyn Kolesnikov
@@ -56,11 +61,12 @@ import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
  */
 public class JasperPdfGenerator {
     private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml";
+    private static Float ZOOM_2X = Float.valueOf(2);
     private XMLTag xmlTag;
 
     /**.*/
     public enum DocType {
-        ODT, PDF, RTF, XLS;
+        ODT, PDF, PNG, RTF, XLS;
     }
 
     public JasperPdfGenerator() {
@@ -125,6 +131,16 @@ public class JasperPdfGenerator {
                     odtExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
                     odtExporter.exportReport();
                     break;
+                case PNG:
+                    BufferedImage pageImage = new BufferedImage((int) (jasperPrint.getPageWidth() * ZOOM_2X + 1),
+                        (int) (jasperPrint.getPageHeight() * ZOOM_2X + 1), BufferedImage.TYPE_INT_RGB);
+                    JRGraphics2DExporter exporter = new JRGraphics2DExporter();
+                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                    exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, pageImage.getGraphics());
+                    exporter.setParameter(JRGraphics2DExporterParameter.ZOOM_RATIO, ZOOM_2X);
+                    exporter.setParameter(JRExporterParameter.PAGE_INDEX, Integer.valueOf(0));
+                    exporter.exportReport();
+                    ImageIO.write(pageImage, "png", os);
                 default:
                     break;
             }
