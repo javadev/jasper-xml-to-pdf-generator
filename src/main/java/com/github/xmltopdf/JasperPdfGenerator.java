@@ -48,6 +48,7 @@ import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 
 /**.
  * @author Valentyn Kolesnikov
@@ -59,7 +60,7 @@ public class JasperPdfGenerator {
 
     /**.*/
     public enum DocType {
-        PDF, RTF, XLS;
+        ODT, PDF, RTF, XLS;
     }
 
     public JasperPdfGenerator() {
@@ -105,6 +106,7 @@ public class JasperPdfGenerator {
                     JRRtfExporter rtfExporter = new JRRtfExporter();
                     rtfExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
                     rtfExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                    rtfExporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
                     rtfExporter.exportReport();
                     break;
                 case XLS:
@@ -116,6 +118,12 @@ public class JasperPdfGenerator {
                     xlsExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
                     xlsExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
                     xlsExporter.exportReport();
+                    break;
+                case ODT:
+                    JROdtExporter odtExporter = new JROdtExporter();
+                    odtExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                    odtExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                    odtExporter.exportReport();
                     break;
                 default:
                     break;
