@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -62,7 +63,8 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
  * @version $Revision$ $Date$
  */
 public class JasperPdfGenerator {
-    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml";
+    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml [--doctype=html|odt|pdf|png|rtf|xls]";
+    private static final String DOC_TYPE = "--doctype=";
     private static final Float ZOOM_2X = Float.valueOf(2);
     private XMLTag xmlTag;
 
@@ -199,19 +201,29 @@ public class JasperPdfGenerator {
         }
         List<String> templates = new ArrayList<String>();
         List<String> xmls = new ArrayList<String>();
+        List<String> types = new ArrayList<String>();
         for (String arg : args) {
             if (arg.endsWith(".jrxml")) {
                 templates.add(arg);
             } else if (arg.endsWith(".xml")) {
                 xmls.add(arg);
+            } else if (arg.startsWith(DOC_TYPE)) {
+                types = Arrays.asList(arg.substring(DOC_TYPE.length()).replaceAll("\\s+", "").toUpperCase().split(","));
             }
         }
         if (templates.isEmpty()) {
            LOG.info(null, USAGE);
            return;
         }
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        new JasperPdfGenerator().createDocument(templates, xmls, os, DocType.PDF);
-        os.writeTo(new FileOutputStream(templates.get(0).replaceFirst("\\.jrxml$", ".pdf")));
+        if (types.isEmpty()) {
+            types.add("PDF");
+        }
+        for (String type : types) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            if (DocType.valueOf(type) != null) {
+                new JasperPdfGenerator().createDocument(templates, xmls, os, DocType.valueOf(type));
+                os.writeTo(new FileOutputStream(templates.get(0).replaceFirst("\\.jrxml$", "." + type.toLowerCase())));
+            }
+        }
     }
 }
