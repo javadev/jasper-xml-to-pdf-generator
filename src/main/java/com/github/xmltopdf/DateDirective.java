@@ -44,7 +44,7 @@ public class DateDirective extends Directive {
         return LINE;
     }
 
-    public boolean render(InternalContextAdapter context, Writer writer, Node node) 
+    public boolean render(InternalContextAdapter context, Writer writer, Node node)
             throws IOException, ResourceNotFoundException, ParseErrorException, MethodInvocationException {
 
         //setting default params

@@ -281,7 +281,8 @@ public class MoneyToStr {
         } while (intPart > 0);
 
         if (pennies == Pennies.TEXT) {
-            money2str.append(language == Language.ENG ? " and " : " ").append(theKopeiki == 0 ? messages.get("0")[0] + " " : triad2Word(theKopeiki, 0L, kopSex));
+            money2str.append(language == Language.ENG ? " and " : " ").append(theKopeiki == 0 ? messages.get("0")[0] + " " :
+                triad2Word(theKopeiki, 0L, kopSex));
         } else {
             money2str.append(" " + (theKopeiki < 10 ? "0" + theKopeiki : theKopeiki) + " ");
         }

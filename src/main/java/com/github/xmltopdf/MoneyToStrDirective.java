@@ -41,7 +41,7 @@ public class MoneyToStrDirective extends Directive {
         return LINE;
     }
 
-    public boolean render(InternalContextAdapter context, Writer writer, Node node) 
+    public boolean render(InternalContextAdapter context, Writer writer, Node node)
             throws IOException, ResourceNotFoundException, ParseErrorException, MethodInvocationException {
 
         //setting default params
@@ -62,6 +62,7 @@ public class MoneyToStrDirective extends Directive {
         if ("null".equals(moneyValue) || moneyValue == null) {
             return "";
         }
-        return new MoneyToStr(MoneyToStr.Currency.UAH, MoneyToStr.Language.UKR, MoneyToStr.Pennies.NUMBER).convert(new java.math.BigDecimal(moneyValue).doubleValue());
+        return new MoneyToStr(MoneyToStr.Currency.UAH, MoneyToStr.Language.UKR, MoneyToStr.Pennies.NUMBER).convert(
+            new java.math.BigDecimal(moneyValue).doubleValue());
     }
 }

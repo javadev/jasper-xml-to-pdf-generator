@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -45,6 +44,10 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.export.JRRtfExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 /**.
  * @author Valentyn Kolesnikov
@@ -54,11 +57,19 @@ public class JasperPdfGenerator {
     private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml";
     private XMLTag xmlTag;
 
+    /**.*/
+    public enum DocType {
+        PDF, RTF, XLS;
+    }
+
     public JasperPdfGenerator() {
+    }
+
+    static {
         org.apache.log4j.BasicConfigurator.configure();
     }
 
-    private void createPDFJasper(List<String> templateNames, List<String> xmlFileNames, ByteArrayOutputStream os) {
+    private void createDocument(List<String> templateNames, List<String> xmlFileNames, ByteArrayOutputStream os, DocType docType) {
         List<JasperPrint> jasperPrints = new ArrayList<JasperPrint>();
         InputStream fileIs = null;
         InputStream stringIs = null;
@@ -86,7 +97,29 @@ public class JasperPdfGenerator {
                     jasperPrint.addPage(page);
                 }
             }
-            JasperExportManager.exportReportToPdfStream(jasperPrint, os);
+            switch (docType) {
+                case PDF:
+                    JasperExportManager.exportReportToPdfStream(jasperPrint, os);
+                    break;
+                case RTF:
+                    JRRtfExporter rtfExporter = new JRRtfExporter();
+                    rtfExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                    rtfExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                    rtfExporter.exportReport();
+                    break;
+                case XLS:
+                    JRXlsExporter xlsExporter = new JRXlsExporter();
+                    xlsExporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+                    xlsExporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, os);
+                    xlsExporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
+                    xlsExporter.setParameter(JRXlsExporterParameter.IS_AUTO_DETECT_CELL_TYPE, Boolean.TRUE);
+                    xlsExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+                    xlsExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+                    xlsExporter.exportReport();
+                    break;
+                default:
+                    break;
+            }
         } catch (Exception ex) {
             LOG.error(this, ex, ex.getMessage());
         } finally {
@@ -117,9 +150,10 @@ public class JasperPdfGenerator {
         return writer.toString();
     }
 
+    /**.*/
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-           System.out.println(USAGE);
+           LOG.info(null, USAGE);
            return;
         }
         List<String> templates = new ArrayList<String>();
@@ -132,11 +166,11 @@ public class JasperPdfGenerator {
             }
         }
         if (templates.isEmpty()) {
-           System.out.println(USAGE);
+           LOG.info(null, USAGE);
            return;
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        new JasperPdfGenerator().createPDFJasper(templates, xmls, os);
+        new JasperPdfGenerator().createDocument(templates, xmls, os, DocType.PDF);
         os.writeTo(new FileOutputStream(templates.get(0).replaceFirst("\\.jrxml$", ".pdf")));
     }
 }
