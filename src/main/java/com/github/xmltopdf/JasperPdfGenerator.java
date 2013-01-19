@@ -143,7 +143,8 @@ public class JasperPdfGenerator {
         properties.setProperty("userdirective",
                 "com.github.xmltopdf.MoneyUAHDirective,"
                 + "com.github.xmltopdf.MoneyToStrDirective,"
-                + "com.github.xmltopdf.DateDirective");
+                + "com.github.xmltopdf.DateDirective,"
+                + "com.github.xmltopdf.UkrToLatinDirective");
         Velocity.init(properties);
 
         StringResourceRepository repo = StringResourceLoader.getRepository();

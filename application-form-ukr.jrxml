@@ -172,7 +172,7 @@
                 <textElement markup="styled">
                     <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
                 </textElement>
-                <text><![CDATA[Прізвище (латинськими буквами): <b>${in_person.last_name_latin}</b> Ім'я (латинськими буквами): <b>${in_person.first_name_latin}</b>
+                <text><![CDATA[Прізвище (латинськими буквами): <b>#ukrtolatin("#get('surname')")</b> Ім'я (латинськими буквами): <b>#ukrtolatin("#get('firstName')")</b>
 Прізвище, ім’я, по-батькові (російською мовою): <b>${in_person_fio_ru}</b>
 Прізвище, ім’я, по-батькові (українською мовою): ${in_person_fio}
 Чи змінював клієнт прізвище Ні Дата народження: #date(${in_person.birthday}) Місце народження: ${in_person.birth_place}
