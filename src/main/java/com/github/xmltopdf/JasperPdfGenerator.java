@@ -57,20 +57,21 @@ import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 
 /**.
  * @author Valentyn Kolesnikov
  * @version $Revision$ $Date$
  */
 public class JasperPdfGenerator {
-    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml [--doctype=html|odt|pdf|png|rtf|xls]";
+    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml [--doctype=docx|html|odt|pdf|png|rtf|xls]";
     private static final String DOC_TYPE = "--doctype=";
     private static final Float ZOOM_2X = Float.valueOf(2);
     private XMLTag xmlTag;
 
     /**.*/
     public enum DocType {
-        HTML, ODT, PDF, PNG, RTF, XLS;
+        DOCX, HTML, ODT, PDF, PNG, RTF, XLS;
     }
 
     public JasperPdfGenerator() {
@@ -155,6 +156,12 @@ public class JasperPdfGenerator {
                     htmlExporter.setParameter(JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR, Boolean.TRUE);
                     htmlExporter.setParameter(JRHtmlExporterParameter.ZOOM_RATIO, ZOOM_2X);
                     htmlExporter.exportReport();
+                    break;
+                case DOCX:
+                    JRDocxExporter docxExporter = new JRDocxExporter();
+                    docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                    docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                    docxExporter.exportReport();
                     break;
                 default:
                     break;
