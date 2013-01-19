@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-    <fio>Прізвище Ім'я По батькові</fio>
+    <surname>Прізвище</surname>
+    <firstName>Ім'я</firstName>
+    <middleName>По батькові</middleName>
     <duration>24</duration>
 </root>

@@ -51,6 +51,7 @@ import net.sf.jasperreports.engine.JRPrintPage;
  * @version $Revision$ $Date$
  */
 public class JasperPdfGenerator {
+    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml";
     private XMLTag xmlTag;
 
     public JasperPdfGenerator() {
@@ -65,27 +66,27 @@ public class JasperPdfGenerator {
             xmlTag = XMLDoc.from(new File(xmlFileNames.get(0)), true);
         }
         try {
-            try {
-                for (String templateName : templateNames) {
+            for (String templateName : templateNames) {
+                try {
                     fileIs = new FileInputStream(templateNames.get(0));
                     String contents = applyVelocityTemplate(IOUtils.toString(fileIs, "UTF-8"));
                     stringIs = IOUtils.toInputStream(contents, "UTF-8");
                     JasperReport jasperReport = JasperCompileManager.compileReport(stringIs);
                     jasperPrints.add(JasperFillManager.fillReport(
                         jasperReport, new HashMap(), new JREmptyDataSource()));
+                } finally {
+                    IOUtils.closeQuietly(fileIs);
+                    IOUtils.closeQuietly(stringIs);
                 }
-                JasperPrint jasperPrint = jasperPrints.get(0);
-                for (int index = 1; index < jasperPrints.size(); index += 1) {
-                    List<JRPrintPage> pages = jasperPrints.get(index).getPages();
-                    for (JRPrintPage page : pages) {
-                        jasperPrint.addPage(page);
-                    }
-                }
-                JasperExportManager.exportReportToPdfStream(jasperPrint, os);
-            } finally {
-                IOUtils.closeQuietly(fileIs);
-                IOUtils.closeQuietly(stringIs);
             }
+            JasperPrint jasperPrint = jasperPrints.get(0);
+            for (int index = 1; index < jasperPrints.size(); index += 1) {
+                List<JRPrintPage> pages = jasperPrints.get(index).getPages();
+                for (JRPrintPage page : pages) {
+                    jasperPrint.addPage(page);
+                }
+            }
+            JasperExportManager.exportReportToPdfStream(jasperPrint, os);
         } catch (Exception ex) {
             LOG.error(this, ex, ex.getMessage());
         } finally {
@@ -94,10 +95,10 @@ public class JasperPdfGenerator {
     }
 
     private String applyVelocityTemplate(String templateData) throws Exception {
-        Properties p = new Properties();
-        p.setProperty("resource.loader", "string");
-        p.setProperty("string.resource.loader.class", "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
-        Velocity.init(p);
+        Properties properties = new Properties();
+        properties.setProperty("resource.loader", "string");
+        properties.setProperty("string.resource.loader.class", "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
+        Velocity.init(properties);
 
         StringResourceRepository repo = StringResourceLoader.getRepository();
         repo.putStringResource("template", templateData);
@@ -113,7 +114,7 @@ public class JasperPdfGenerator {
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-           System.out.println("Usage: java -jar xmltopdf.jar template.jrxml data.xml");
+           System.out.println(USAGE);
            return;
         }
         List<String> templates = new ArrayList<String>();
@@ -126,7 +127,7 @@ public class JasperPdfGenerator {
             }
         }
         if (templates.isEmpty()) {
-           System.out.println("Usage: java -jar xmltopdf.jar template.jrxml data.xml");
+           System.out.println(USAGE);
            return;
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();

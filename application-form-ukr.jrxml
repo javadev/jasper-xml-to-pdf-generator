@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-#macro( regaddr $in_person )
-$in_person.regpostindex #dictionary("provinceList", $in_person.dictionary_regprovince) обл.,
- #dictionaryExp("regionList", $in_person.dictionary_regregion, $in_person.dictionary_regprovince) район,
- м. #dictionaryExp2("cityList", $in_person.dictionary_regcity, $in_person.dictionary_regregion, $in_person.dictionary_regprovince), $in_person.regstreet $in_person.reghouse#if($in_person.regflat), $in_person.regflat#end#if($in_person.regadditionalinfo), $in_person.regadditionalinfo#end
+#macro( get $path )
+#if($xml.hasTag($path))$xml.getText($path)#else#end
 #end
-#macro( mailaddr $in_person )
-$in_person.mailpostindex #dictionary("provinceList", $in_person.dictionary_mailprovince) обл.,
- #dictionaryExp("regionList", $in_person.dictionary_mailregion, $in_person.dictionary_mailprovince) район,
- м. #dictionaryExp2("cityList", $in_person.dictionary_mailcity, $in_person.dictionary_mailregion, $in_person.dictionary_mailprovince), $in_person.mailstreet $in_person.mailhouse#if($in_person.mailflat), $in_person.mailflat#end#if($in_person.mailadditionalinfo), $in_person.mailadditionalinfo#end
+#macro( fio )
+#get("surname") #get("firstName") #get("middleName")
 #end
-#macro( empladdr $in_person )
-$in_person.empl_regpostindex #dictionary("provinceList", $in_person.dict_empl_regprovince) обл.,
- #dictionaryExp("regionList", $in_person.dict_empl_regregion, $in_person.dict_empl_regprovince) район,
- м. #dictionaryExp2("cityList", $in_person.dict_empl_regcity, $in_person.dict_empl_regregion, $in_person.dict_empl_regprovince), $in_person.empl_regstreet $in_person.empl_reghouse#if($in_person.empl_regflat), $in_person.mailflat#end#if($in_person.empl_regadditionalinfo), $in_person.empl_regadditionalinfo#end
+#macro( regaddr )
+#get("regpostindex") #get("regprovince") обл.,
+ #get("regregion") район,
+ м. #get("regcity")
+#end
+#macro( mailaddr )
+#get("mailpostindex") #get("mailprovince") обл.,
+ #get("mailregion") район,
+ м. #get("mailcity")
+#end
+#macro( empladdr )
+#get("emplpostindex") #get("emplprovince") обл.,
+ #get("emplregion") район,
+ м. #get("emplcity")
 #end
 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="application-form-ukr" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
@@ -142,8 +148,8 @@ $in_person.empl_regpostindex #dictionary("provinceList", $in_person.dict_empl_re
                 <textElement markup="styled">
                     <font fontName="Arial" size="8" isBold="false" pdfEncoding="Cp1251"/>
                 </textElement>
-                <text><![CDATA[Я, <b>$xml.getText("fio")</b> прошу АТ «Банк» надати мені споживчий кредит на таких умовах:
-Строк користування кредитом <b>$xml.getText("duration")</b> міс. Сума кредиту <b>#moneyUAH(${in_dossier.amount_of_loan}) (#moneyToStrUAH(${in_dossier.amount_of_loan})).</b> Перший внесок <b>#moneyUAH(${in_dossier.down_payment}) (#moneyToStrUAH(${in_dossier.down_payment})).</b> Валюта кредиту <b>гривня.</b>
+                <text><![CDATA[Я, <b>#fio()</b> прошу АТ «Банк» надати мені споживчий кредит на таких умовах:
+Строк користування кредитом <b>#get("duration")</b> міс. Сума кредиту <b>#moneyUAH(${in_dossier.amount_of_loan}) (#moneyToStrUAH(${in_dossier.amount_of_loan})).</b> Перший внесок <b>#moneyUAH(${in_dossier.down_payment}) (#moneyToStrUAH(${in_dossier.down_payment})).</b> Валюта кредиту <b>гривня.</b>
 Також, прошу АТ «Банк» надати мені додатковий кредит - Кредитну картку з наступними умовами (на умовах Кредитного договору):
 Максимальна сума ліміту додаткового кредиту <b>50 000,00</b> гривень.
 Максимальна процентна ставка за додатковим кредитом <b>40%</b> річних від фактично використаної суми додаткового кредиту.
