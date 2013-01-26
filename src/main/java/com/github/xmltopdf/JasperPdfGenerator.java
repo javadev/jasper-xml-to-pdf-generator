@@ -20,7 +20,6 @@ package com.github.xmltopdf;
 import java.awt.image.BufferedImage;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -86,7 +85,7 @@ public class JasperPdfGenerator {
         InputStream fileIs = null;
         InputStream stringIs = null;
         if (!xmlFileNames.isEmpty()) {
-            xmlTag = XMLDoc.from(new File(xmlFileNames.get(0)), true);
+            xmlTag = XMLDoc.from(MergeXml.merge(xmlFileNames), true);
         }
         try {
             for (String templateName : templateNames) {
@@ -200,6 +199,7 @@ public class JasperPdfGenerator {
     /**.
      * @param args
      *            the arguments
+     * @throws IOException in case IO error
      */
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
