@@ -32,9 +32,9 @@ import org.apache.velocity.runtime.parser.node.Node;
  * @version $Revision$ $Date$
  */
 public class DateDirective extends Directive {
-    private java.text.SimpleDateFormat defaultFormat = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",
+    private final java.text.SimpleDateFormat defaultFormat = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",
         java.util.Locale.US);
-    private java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("dd.MM.yyyy", java.util.Locale.US);
+    private final java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("dd.MM.yyyy", java.util.Locale.US);
 
     public String getName() {
         return "date";
@@ -66,7 +66,7 @@ public class DateDirective extends Directive {
             return "";
         }
         try {
-        return format.format(defaultFormat.parse(dateValue));
+            return format.format(defaultFormat.parse(dateValue));
         } catch (Exception ex) {
             return "";
         }
