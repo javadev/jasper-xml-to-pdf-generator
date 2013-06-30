@@ -124,7 +124,7 @@ public class JasperPdfGenerator {
                     xlsExporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
                     xlsExporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, os);
                     xlsExporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
-                    xlsExporter.setParameter(JRXlsExporterParameter.IS_AUTO_DETECT_CELL_TYPE, Boolean.TRUE);
+//                    xlsExporter.setParameter(JRXlsExporterParameter.IS_AUTO_DETECT_CELL_TYPE, Boolean.TRUE);
                     xlsExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
                     xlsExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
                     xlsExporter.exportReport();

@@ -23,7 +23,17 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>3.7.5</version>
+            <version>5.1.0</version>
+        <exclusions>
+            <exclusion>
+                <groupId>bouncycastle</groupId>
+	        <artifactId>bcmail-jdk14</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>bouncycastle</groupId>
+	        <artifactId>bcprov-jdk14</artifactId>
+            </exclusion>
+        </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
