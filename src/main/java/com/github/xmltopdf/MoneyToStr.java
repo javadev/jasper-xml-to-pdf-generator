@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 Valentyn Kolesnikov
+ * Copyright 2014 Valentyn Kolesnikov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,10 +44,162 @@ public class MoneyToStr {
     private static final int NUM9 = 9;
     private static final int NUM10 = 10;
     private static final int NUM11 = 11;
-    private static final int NUM12 = 12;
+    private static final int NUM14 = 14;
     private static final int NUM100 = 100;
     private static final int NUM1000 = 1000;
     private static final int NUM10000 = 10000;
+    private static final String CURRENCY_LIST =
+"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"+
+"<CurrencyList>\n"+
+" \n"+
+" <language value=\"UKR\"/>\n"+
+" <UKR>\n"+
+" <item value=\"0\" text=\"\u043d\u0443\u043b\u044c\"/>\n"+
+" <item value=\"1000_10\" text=\"\u0442\u0438\u0441\u044f\u0447,\u043c\u0456\u043b\u044c\u0439\u043e\u043d\u0456\u0432,\u043c\u0456\u043b\u044c\u044f\u0440\u0434\u0456\u0432,\u0442\u0440\u0438\u043b\u044c\u0439\u043e\u043d\u0456\u0432\"/>\n"+
+" <item value=\"1000_1\" text=\"\u0442\u0438\u0441\u044f\u0447\u0430,\u043c\u0456\u043b\u044c\u0439\u043e\u043d,\u043c\u0456\u043b\u044c\u044f\u0440\u0434,\u0442\u0440\u0438\u043b\u044c\u0439\u043e\u043d\"/>\n"+
+" <item value=\"1000_234\" text=\"\u0442\u0438\u0441\u044f\u0447\u0456,\u043c\u0456\u043b\u044c\u0439\u043e\u043d\u0430,\u043c\u0456\u043b\u044c\u044f\u0440\u0434\u0430,\u0442\u0440\u0438\u043b\u044c\u0439\u043e\u043d\u0430\"/>\n"+
+" <item value=\"1000_5\" text=\"\u0442\u0438\u0441\u044f\u0447,\u043c\u0456\u043b\u044c\u0439\u043e\u043d\u0456\u0432,\u043c\u0456\u043b\u044c\u044f\u0440\u0434\u0456\u0432,\u0442\u0440\u0438\u043b\u044c\u0439\u043e\u043d\u0456\u0432\"/>\n"+
+" <item value=\"10_19\" text=\"\u0434\u0435\u0441\u044f\u0442\u044c,\u043e\u0434\u0438\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u0434\u0432\u0430\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u0442\u0440\u0438\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u0447\u043e\u0442\u0438\u0440\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u043f\u2019\u044f\u0442\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u0448i\u0441\u0442\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u0441i\u043c\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u0432i\u0441i\u043c\u043d\u0430\u0434\u0446\u044f\u0442\u044c,\u0434\u0435\u0432\'\u044f\u0442\u043d\u0430\u0434\u0446\u044f\u0442\u044c\"/>\n"+
+" <item value=\"1\" text=\"\u043e\u0434\u043d\u0430,\u043e\u0434\u0438\u043d,\u043e\u0434\u0438\u043d,\u043e\u0434\u043d\u0430\"/>\n"+
+" <item value=\"2\" text=\"\u0434\u0432\u0456,\u0434\u0432\u0430,\u0434\u0432\u0430,\u0434\u0432\u0456\"/>\n"+
+" <item value=\"3_9\" text=\"\u0442\u0440\u0438,\u0447\u043e\u0442\u0438\u0440\u0438,\u043f\u2019\u044f\u0442\u044c,\u0448\u0456\u0441\u0442\u044c,\u0441\u0456\u043c,\u0432\u0456\u0441\u0456\u043c,\u0434\u0435\u0432\u2019\u044f\u0442\u044c\"/>\n"+
+" <item value=\"100_900\" text=\"\u0441\u0442\u043e ,\u0434\u0432\u0456\u0441\u0442\u0456 ,\u0442\u0440\u0438\u0441\u0442\u0430 ,\u0447\u043e\u0442\u0438\u0440\u0438\u0441\u0442\u0430 ,\u043f\u2019\u044f\u0442\u0441\u043e\u0442 ,\u0448\u0456\u0441\u0442\u0441\u043e\u0442 ,\u0441\u0456\u043c\u0441\u043e\u0442 ,\u0432\u0456\u0441\u0456\u043c\u0441\u043e\u0442 ,\u0434\u0435\u0432\u2019\u044f\u0442\u0441\u043e\u0442 \"/>\n"+
+" <item value=\"20_90\" text=\"\u0434\u0432\u0430\u0434\u0446\u044f\u0442\u044c ,\u0442\u0440\u0438\u0434\u0446\u044f\u0442\u044c ,\u0441\u043e\u0440\u043e\u043a ,\u043f\u2019\u044f\u0442\u0434\u0435\u0441\u044f\u0442 ,\u0448\u0456\u0441\u0442\u0434\u0435\u0441\u044f\u0442 ,\u0441\u0456\u043c\u0434\u0435\u0441\u044f\u0442 ,\u0432\u0456\u0441\u0456\u043c\u0434\u0435\u0441\u044f\u0442 ,\u0434\u0435\u0432\u2019\u044f\u043d\u043e\u0441\u0442\u043e \"/>\n"+
+" <item value=\"pdv\" text=\"\u0432 \u0442.\u0447. \u041f\u0414\u0412 \"/>\n"+
+" <item value=\"pdv_value\" text=\"20\"/>\n"+
+" </UKR>\n"+
+" <RUS>\n"+
+" <item value=\"0\" text=\"\u043d\u043e\u043b\u044c\"/>\n"+
+" <item value=\"1000_10\" text=\"\u0442\u044b\u0441\u044f\u0447,\u043c\u0438\u043b\u043b\u0438\u043e\u043d\u043e\u0432,\u043c\u0438\u043b\u043b\u0438\u0430\u0440\u0434\u043e\u0432,\u0442\u0440\u0438\u043b\u043b\u0438\u043e\u043d\u043e\u0432\"/>\n"+
+" <item value=\"1000_1\" text=\"\u0442\u044b\u0441\u044f\u0447\u0430,\u043c\u0438\u043b\u043b\u0438\u043e\u043d,\u043c\u0438\u043b\u043b\u0438\u0430\u0440\u0434,\u0442\u0440\u0438\u043b\u043b\u0438\u043e\u043d\"/>\n"+
+" <item value=\"1000_234\" text=\"\u0442\u044b\u0441\u044f\u0447\u0438,\u043c\u0438\u043b\u043b\u0438\u043e\u043d\u0430,\u043c\u0438\u043b\u043b\u0438\u0430\u0440\u0434\u0430,\u0442\u0440\u0438\u043b\u043b\u0438\u043e\u043d\u0430\"/>\n"+
+" <item value=\"1000_5\" text=\"\u0442\u044b\u0441\u044f\u0447,\u043c\u0438\u043b\u043b\u0438\u043e\u043d\u043e\u0432,\u043c\u0438\u043b\u043b\u0438\u0430\u0440\u0434\u043e\u0432,\u0442\u0440\u0438\u043b\u043b\u0438\u043e\u043d\u043e\u0432\"/>\n"+
+" <item value=\"10_19\" text=\"\u0434\u0435\u0441\u044f\u0442\u044c,\u043e\u0434\u0438\u043d\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u0434\u0432\u0435\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u0442\u0440\u0438\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u0447\u0435\u0442\u044b\u0440\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u043f\u044f\u0442\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u0448\u0435\u0441\u0442\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u0441\u0435\u043c\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u0432\u043e\u0441\u0435\u043c\u043d\u0430\u0434\u0446\u0430\u0442\u044c,\u0434\u0435\u0432\u044f\u0442\u043d\u0430\u0434\u0446\u0430\u0442\u044c\"/>\n"+
+" <item value=\"1\" text=\"\u043e\u0434\u043d\u0430,\u043e\u0434\u0438\u043d,\u043e\u0434\u0438\u043d,\u043e\u0434\u043d\u0430\"/>\n"+
+" <item value=\"2\" text=\"\u0434\u0432\u0435,\u0434\u0432\u0430,\u0434\u0432\u0430,\u0434\u0432\u0435\"/>\n"+
+" <item value=\"3_9\" text=\"\u0442\u0440\u0438,\u0447\u0435\u0442\u044b\u0440\u0435,\u043f\u044f\u0442\u044c,\u0448\u0435\u0441\u0442\u044c,\u0441\u0435\u043c\u044c,\u0432\u043e\u0441\u0435\u043c\u044c,\u0434\u0435\u0432\u044f\u0442\u044c\"/>\n"+
+" <item value=\"100_900\" text=\"\u0441\u0442\u043e ,\u0434\u0432\u0435\u0441\u0442\u0438 ,\u0442\u0440\u0438\u0441\u0442\u0430 ,\u0447\u0435\u0442\u044b\u0440\u0435\u0441\u0442\u0430 ,\u043f\u044f\u0442\u044c\u0441\u043e\u0442 ,\u0448\u0435\u0441\u0442\u044c\u0441\u043e\u0442 ,\u0441\u0435\u043c\u044c\u0441\u043e\u0442 ,\u0432\u043e\u0441\u0435\u043c\u044c\u0441\u043e\u0442 ,\u0434\u0435\u0432\u044f\u0442\u044c\u0441\u043e\u0442 \"/>\n"+
+" <item value=\"20_90\" text=\"\u0434\u0432\u0430\u0434\u0446\u0430\u0442\u044c ,\u0442\u0440\u0438\u0434\u0446\u0430\u0442\u044c ,\u0441\u043e\u0440\u043e\u043a ,\u043f\u044f\u0442\u044c\u0434\u0435\u0441\u044f\u0442 ,\u0448\u0435\u0441\u0442\u044c\u0434\u0435\u0441\u044f\u0442 ,\u0441\u0435\u043c\u044c\u0434\u0435\u0441\u044f\u0442 ,\u0432\u043e\u0441\u0435\u043c\u044c\u0434\u0435\u0441\u044f\u0442 ,\u0434\u0435\u0432\u044f\u043d\u043e\u0441\u0442\u043e \"/>\n"+
+" <item value=\"pdv\" text=\"\u0432 \u0442.\u0447. \u041d\u0414\u0421 \"/>\n"+
+" <item value=\"pdv_value\" text=\"18\"/>\n"+
+" </RUS>\n"+
+" <ENG>\n"+
+" <item value=\"0\" text=\"zero\"/>\n"+
+" <item value=\"1000_10\" text=\"thousand,million,billion,trillion\"/>\n"+
+" <item value=\"1000_1\" text=\"thousand,million,billion,trillion\"/>\n"+
+" <item value=\"1000_234\" text=\"thousand,million,billion,trillion\"/>\n"+
+" <item value=\"1000_5\" text=\"thousand,million,billion,trillion\"/>\n"+
+" <item value=\"10_19\" text=\"ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen\"/>\n"+
+" <item value=\"1\" text=\"one,one,one,one\"/>\n"+
+" <item value=\"2\" text=\"two,two,two,two\"/>\n"+
+" <item value=\"3_9\" text=\"three,four,five,six,seven,eight,nine\"/>\n"+
+" <item value=\"100_900\" text=\"one hundred ,two hundred ,three hundred ,four hundred ,five hundred ,six hundred ,seven hundred ,eight hundred ,nine hundred \"/>\n"+
+" <item value=\"20_90\" text=\"twenty-,thirty-,forty-,fifty-,sixty-,seventy-,eighty-,ninety-\"/>\n"+
+" <item value=\"pdv\" text=\"including VAT \"/>\n"+
+" <item value=\"pdv_value\" text=\"10\"/>\n"+
+" </ENG>\n"+
+"\n"+
+" <RUR CurrID=\"810\" CurrName=\"\u0420\u043e\u0441\u0441\u0438\u0439\u0441\u043a\u0438\u0435 \u0440\u0443\u0431\u043b\u0438\" language=\"RUS\"\n"+
+" RubOneUnit=\"\u0440\u0443\u0431\u043b\u044c\" RubTwoUnit=\"\u0440\u0443\u0431\u043b\u044f\" RubFiveUnit=\"\u0440\u0443\u0431\u043b\u0435\u0439\" RubSex=\"M\" RubShortUnit=\"\u0440\u0443\u0431.\"\n"+
+" KopOneUnit=\"\u043a\u043e\u043f\u0435\u0439\u043a\u0430\" KopTwoUnit=\"\u043a\u043e\u043f\u0435\u0439\u043a\u0438\" KopFiveUnit=\"\u043a\u043e\u043f\u0435\u0435\u043a\" KopSex=\"F\"\n"+
+" />\n"+
+" <UAH CurrID=\"980\" CurrName=\"\u0423\u043a\u0440\u0430\u0438\u043d\u0441\u043a\u0456 \u0433\u0440\u0438\u0432\u043d\u0456\" language=\"RUS\"\n"+
+" RubOneUnit=\"\u0433\u0440\u0438\u0432\u043d\u044f\" RubTwoUnit=\"\u0433\u0440\u0438\u0432\u043d\u0438\" RubFiveUnit=\"\u0433\u0440\u0438\u0432\u0435\u043d\u044c\" RubSex=\"F\" RubShortUnit=\"\u0433\u0440\u043d.\"\n"+
+" KopOneUnit=\"\u043a\u043e\u043f\u0435\u0439\u043a\u0430\" KopTwoUnit=\"\u043a\u043e\u043f\u0435\u0439\u043a\u0438\" KopFiveUnit=\"\u043a\u043e\u043f\u0435\u0435\u043a\" KopSex=\"F\"\n"+
+" />\n"+
+" <USD CurrID=\"840\" CurrName=\"\u0414\u043e\u043b\u0430\u0440\u0438 \u0421\u0428\u0410\" language=\"RUS\"\n"+
+" RubOneUnit=\"\u0434\u043e\u043b\u043b\u0430\u0440\" RubTwoUnit=\"\u0434\u043e\u043b\u043b\u0430\u0440\u0430\" RubFiveUnit=\"\u0434\u043e\u043b\u043b\u0430\u0440\u043e\u0432\" RubSex=\"M\" RubShortUnit=\"\u0434\u043e\u043b.\"\n"+
+" KopOneUnit=\"\u0446\u0435\u043d\u0442\" KopTwoUnit=\"\u0446\u0435\u043d\u0430\" KopFiveUnit=\"\u0446\u0435\u043d\u0442\u043e\u0432\" KopSex=\"M\"\n"+
+" />\n"+
+"\n"+
+" <RUR CurrID=\"810\" CurrName=\"\u0420\u043e\u0441\u0441\u0438\u0439\u0441\u043a\u0438\u0435 \u0440\u0443\u0431\u043b\u0438\" language=\"UKR\"\n"+
+" RubOneUnit=\"\u0440\u0443\u0431\u043b\u044c\" RubTwoUnit=\"\u0440\u0443\u0431\u043b\u0456\" RubFiveUnit=\"\u0440\u0443\u0431\u043b\u0456\u0432\" RubSex=\"M\" RubShortUnit=\"\u0440\u0443\u0431.\"\n"+
+" KopOneUnit=\"\u043a\u043e\u043f\u0456\u0439\u043a\u0430\" KopTwoUnit=\"\u043a\u043e\u043f\u0456\u0439\u043a\u0438\" KopFiveUnit=\"\u043a\u043e\u043f\u0456\u0439\u043e\u043a\" KopSex=\"F\"\n"+
+" /> \n"+
+" <UAH CurrID=\"980\" CurrName=\"\u0423\u043a\u0440\u0430\u0438\u043d\u0441\u043a\u0456 \u0433\u0440\u0438\u0432\u043d\u0456\" language=\"UKR\"\n"+
+" RubOneUnit=\"\u0433\u0440\u0438\u0432\u043d\u044f\" RubTwoUnit=\"\u0433\u0440\u0438\u0432\u043d\u0456\" RubFiveUnit=\"\u0433\u0440\u0438\u0432\u0435\u043d\u044c\" RubSex=\"F\" RubShortUnit=\"\u0433\u0440\u043d.\"\n"+
+" KopOneUnit=\"\u043a\u043e\u043f\u0456\u0439\u043a\u0430\" KopTwoUnit=\"\u043a\u043e\u043f\u0456\u0439\u043a\u0438\" KopFiveUnit=\"\u043a\u043e\u043f\u0456\u0439\u043e\u043a\" KopSex=\"F\"\n"+
+" />\n"+
+" <USD CurrID=\"840\" CurrName=\"\u0414\u043e\u043b\u0430\u0440\u0438 \u0421\u0428\u0410\" language=\"UKR\"\n"+
+" RubOneUnit=\"\u0434\u043e\u043b\u0430\u0440\" RubTwoUnit=\"\u0434\u043e\u043b\u0430\u0440\u0430\" RubFiveUnit=\"\u0434\u043e\u043b\u0430\u0440\u0456\u0432\" RubSex=\"M\" RubShortUnit=\"\u0434\u043e\u043b.\"\n"+
+" KopOneUnit=\"\u0446\u0435\u043d\u0442\" KopTwoUnit=\"\u0446\u0435\u043d\u0430\" KopFiveUnit=\"\u0446\u0435\u043d\u0442\u0456\u0432\" KopSex=\"M\"\n"+
+" />\n"+
+"\n"+
+" <RUR CurrID=\"810\" CurrName=\"\u0420\u043e\u0441\u0441\u0438\u0439\u0441\u043a\u0438\u0435 \u0440\u0443\u0431\u043b\u0438\" language=\"ENG\"\n"+
+" RubOneUnit=\"ruble\" RubTwoUnit=\"rubles\" RubFiveUnit=\"rubles\" RubSex=\"M\" RubShortUnit=\"RUR.\"\n"+
+" KopOneUnit=\"kopeck\" KopTwoUnit=\"kopecks\" KopFiveUnit=\"kopecks\" KopSex=\"M\"\n"+
+" /> \n"+
+" <UAH CurrID=\"980\" CurrName=\"\u0423\u043a\u0440\u0430\u0438\u043d\u0441\u043a\u0456 \u0433\u0440\u0438\u0432\u043d\u0456\" language=\"ENG\"\n"+
+" RubOneUnit=\"hryvnia\" RubTwoUnit=\"hryvnias\" RubFiveUnit=\"hryvnias\" RubSex=\"M\" RubShortUnit=\"UAH.\"\n"+
+" KopOneUnit=\"kopeck\" KopTwoUnit=\"kopecks\" KopFiveUnit=\"kopecks\" KopSex=\"M\"\n"+
+" />\n"+
+" <USD CurrID=\"840\" CurrName=\"\u0414\u043e\u043b\u0430\u0440\u0438 \u0421\u0428\u0410\" language=\"ENG\"\n"+
+" RubOneUnit=\"dollar\" RubTwoUnit=\"dollars\" RubFiveUnit=\"dollars\" RubSex=\"M\" RubShortUnit=\"USD.\"\n"+
+" KopOneUnit=\"cent\" KopTwoUnit=\"cents\" KopFiveUnit=\"cents\" KopSex=\"M\"\n"+
+" />\n"+
+"\n"+
+" <PER10 CurrID=\"556\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0434\u0435\u0441\u044f\u0442\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"RUS\"\n"+
+" RubOneUnit=\"\u0446\u0435\u043b\u0430\u044f,\" RubTwoUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubFiveUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0434\u0435\u0441\u044f\u0442\u0430\u044f \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopTwoUnit=\"\u0434\u0435\u0441\u044f\u0442\u044b\u0445 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopFiveUnit=\"\u0434\u0435\u0441\u044f\u0442\u044b\u0445 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER100 CurrID=\"557\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0441\u043e\u0442\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"RUS\"\n"+
+" RubOneUnit=\"\u0446\u0435\u043b\u0430\u044f,\" RubTwoUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubFiveUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0441\u043e\u0442\u0430\u044f \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopTwoUnit=\"\u0441\u043e\u0442\u044b\u0445 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopFiveUnit=\"\u0441\u043e\u0442\u044b\u0445 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER1000 CurrID=\"558\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0442\u0438\u0441\u044f\u0447\u043d\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"RUS\"\n"+
+" RubOneUnit=\"\u0446\u0435\u043b\u0430\u044f,\" RubTwoUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubFiveUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0442\u044b\u0441\u044f\u0447\u043d\u0430\u044f \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopTwoUnit=\"\u0442\u044b\u0441\u044f\u0447\u043d\u044b\u0445 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopFiveUnit=\"\u0442\u044b\u0441\u044f\u0447\u043d\u044b\u0445 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER10000 CurrID=\"559\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0434\u0435\u0441\u044f\u0442\u0438 \u0442\u0438\u0441\u044f\u0447\u043d\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"RUS\"\n"+
+" RubOneUnit=\"\u0446\u0435\u043b\u0430\u044f,\" RubTwoUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubFiveUnit=\"\u0446\u0435\u043b\u044b\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0442\u044b\u0441\u044f\u0447\u043d\u0430\u044f \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopTwoUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0442\u044b\u0441\u044f\u0447\u043d\u044b\u0435 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopFiveUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0442\u044b\u0441\u044f\u0447\u043d\u044b\u0445 \u043f\u0440\u043e\u0446\u0435\u043d\u0442\u0430\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER10 CurrID=\"556\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0434\u0435\u0441\u044f\u0442\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"UKR\"\n"+
+" RubOneUnit=\"\u0446\u0456\u043b\u0430,\" RubTwoUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubFiveUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0434\u0435\u0441\u044f\u0442\u0430 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopTwoUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopFiveUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER100 CurrID=\"557\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0441\u043e\u0442\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"UKR\"\n"+
+" RubOneUnit=\"\u0446\u0456\u043b\u0430,\" RubTwoUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubFiveUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0441\u043e\u0442\u0430 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopTwoUnit=\"\u0441\u043e\u0442\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopFiveUnit=\"\u0441\u043e\u0442\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER1000 CurrID=\"558\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0442\u0438\u0441\u044f\u0447\u043d\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"UKR\"\n"+
+" RubOneUnit=\"\u0446\u0456\u043b\u0430,\" RubTwoUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubFiveUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0442\u0438\u0441\u044f\u0447\u043d\u0430 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopTwoUnit=\"\u0442\u0438\u0441\u044f\u0447\u043d\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopFiveUnit=\"\u0442\u0438\u0441\u044f\u0447\u043d\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER10000 CurrID=\"559\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0434\u0435\u0441\u044f\u0442\u0438 \u0442\u0438\u0441\u044f\u0447\u043d\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"UKR\"\n"+
+" RubOneUnit=\"\u0446\u0456\u043b\u0430,\" RubTwoUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubFiveUnit=\"\u0446\u0456\u043b\u0438\u0445,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0442\u0438\u0441\u044f\u0447\u043d\u0430 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopTwoUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0442\u0438\u0441\u044f\u0447\u043d\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopFiveUnit=\"\u0434\u0435\u0441\u044f\u0442\u0438\u0442\u0438\u0441\u044f\u0447\u043d\u0438\u0445 \u0432\u0456\u0434\u0441\u043e\u0442\u043a\u0430\" KopSex=\"M\"\n"+
+" />\n"+
+"\n"+
+" <PER10 CurrID=\"560\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0434\u0435\u0441\u044f\u0442\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"ENG\"\n"+
+" RubOneUnit=\",\" RubTwoUnit=\"integers,\" RubFiveUnit=\"integers,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"tenth of one percent\" KopTwoUnit=\"tenth of one percent\" KopFiveUnit=\"tenth of one percent\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER100 CurrID=\"561\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0441\u043e\u0442\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"ENG\"\n"+
+" RubOneUnit=\",\" RubTwoUnit=\"integers,\" RubFiveUnit=\"integers,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"hundred percent\" KopTwoUnit=\"hundredth of percent\" KopFiveUnit=\"hundredth of percent\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER1000 CurrID=\"562\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0442\u0438\u0441\u044f\u0447\u043d\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"ENG\"\n"+
+" RubOneUnit=\",\" RubTwoUnit=\"integers,\" RubFiveUnit=\"integers,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"thousandth of percent\" KopTwoUnit=\"thousandths of percent\" KopFiveUnit=\"thousandths of percent\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+" <PER10000 CurrID=\"563\" CurrName=\"\u0412i\u0434\u0441\u043e\u0442\u043a\u0438 \u0437 \u0434\u0435\u0441\u044f\u0442\u0438 \u0442\u0438\u0441\u044f\u0447\u043d\u0438\u043c\u0438 \u0447\u0430\u0441\u0442\u0438\u043d\u0430\u043c\u0438\" language=\"ENG\"\n"+
+" RubOneUnit=\",\" RubTwoUnit=\"integers,\" RubFiveUnit=\"integers,\" RubSex=\"F\"\n"+
+" KopOneUnit=\"ten percent\" KopTwoUnit=\"ten-percent\" KopFiveUnit=\"ten-percent\" KopSex=\"F\"\n"+
+" />\n"+
+"\n"+
+"</CurrencyList>\n"+
+"";
     private java.util.Map<String, String[]> messages = new java.util.LinkedHashMap<String, String[]>();
     private String rubOneUnit;
     private String rubTwoUnit;
@@ -57,41 +209,27 @@ public class MoneyToStr {
     private String kopTwoUnit;
     private String kopFiveUnit;
     private String kopSex;
+    private String rubShortUnit;
     private final Currency currency;
     private final Language language;
     private final Pennies pennies;
 
     static {
         javax.xml.parsers.DocumentBuilderFactory docFactory = javax.xml.parsers.DocumentBuilderFactory.newInstance();
-        InputStream inputStream = null;
-
         try {
             javax.xml.parsers.DocumentBuilder xmlDocBuilder = docFactory.newDocumentBuilder();
-            inputStream = MoneyToStr.class.getResourceAsStream("currlist.xml");
-            xmlDoc = xmlDocBuilder.parse(inputStream);
-        } catch (org.xml.sax.SAXException sxe) {
-            throw new UnsupportedOperationException(sxe);
-        } catch (javax.xml.parsers.ParserConfigurationException pce) {
-            throw new UnsupportedOperationException(pce);
-        } catch (java.io.IOException ioe) {
-            throw new UnsupportedOperationException(ioe);
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.getMessage();
-                }
-            }
+            xmlDoc = xmlDocBuilder.parse(new java.io.ByteArrayInputStream(CURRENCY_LIST.getBytes("UTF8")));
+        } catch (Exception ex) {
+            throw new UnsupportedOperationException(ex);
         }
     }
 
     /** Currency. */
     public enum Currency {
         /**.*/
-        UAH,
-        /**.*/
         RUR,
+        /**.*/
+        UAH,
         /**.*/
         USD,
         /**.*/
@@ -127,19 +265,19 @@ public class MoneyToStr {
      *     MoneyToStr.Currency.UAH, MoneyToStr.Language.UKR, MoneyToStr.Pennies.NUMBER);
      * Definition for currency is placed into currlist.xml
      *
-     * @param currency the currency (UAH, RUR)
-     * @param language the language (UKR, RUS)
+     * @param currency the currency (UAH, RUR, USD)
+     * @param language the language (UKR, RUS, ENG)
      * @param pennies the pennies (NUMBER, TEXT)
      */
     public MoneyToStr(Currency currency, Language language, Pennies pennies) {
         if (currency == null) {
-            throw new IllegalArgumentException("Currency code is null");
+            throw new IllegalArgumentException("currency is null");
         }
         if (language == null) {
-            throw new IllegalArgumentException("Language is null");
+            throw new IllegalArgumentException("language is null");
         }
         if (pennies == null) {
-            throw new IllegalArgumentException("Pennies is null");
+            throw new IllegalArgumentException("pennies is null");
         }
         this.currency = currency;
         this.language = language;
@@ -160,10 +298,6 @@ public class MoneyToStr {
                 break;
             }
         }
-
-        if (theISOElement == null) {
-            throw new IllegalArgumentException("Currency not found " + theISOstr);
-        }
         rubOneUnit = theISOElement.getAttribute("RubOneUnit");
         rubTwoUnit = theISOElement.getAttribute("RubTwoUnit");
         rubFiveUnit = theISOElement.getAttribute("RubFiveUnit");
@@ -172,6 +306,7 @@ public class MoneyToStr {
         kopFiveUnit = theISOElement.getAttribute("KopFiveUnit");
         rubSex = theISOElement.getAttribute("RubSex");
         kopSex = theISOElement.getAttribute("KopSex");
+        rubShortUnit = theISOElement.hasAttribute("RubShortUnit") ? theISOElement.getAttribute("RubShortUnit") : "";
     }
 
     /**
@@ -181,29 +316,43 @@ public class MoneyToStr {
      * @return the string of percent
      */
     public static String percentToStr(Double amount, Language lang) {
+        return percentToStr(amount, lang, Pennies.TEXT);
+    }
+
+    /**
+     * Converts percent to string.
+     * @param amount the amount of percent
+     * @param lang the language (RUS, UKR, ENG)
+     * @param pennies the pennies (NUMBER, TEXT)
+     * @return the string of percent
+     */
+    public static String percentToStr(Double amount, Language lang, Pennies pennies) {
         if (amount == null) {
             throw new IllegalArgumentException("amount is null");
         }
         if (lang == null) {
-            throw new IllegalArgumentException("Language is null");
+            throw new IllegalArgumentException("language is null");
+        }
+        if (pennies == null) {
+            throw new IllegalArgumentException("pennies is null");
         }
         Long intPart = amount.longValue();
         Long fractPart = 0L;
         String result;
         if (amount.floatValue() == amount.intValue()) {
-            result = new MoneyToStr(Currency.PER10, lang, Pennies.TEXT).convert(amount.longValue(), 0L);
+            result = new MoneyToStr(Currency.PER10, lang, pennies).convert(amount.longValue(), 0L);
         } else if (Double.valueOf(amount * NUM10).floatValue() == Double.valueOf(amount * NUM10).intValue()) {
             fractPart = Math.round((amount - intPart) * NUM10);
-            result = new MoneyToStr(Currency.PER10, lang, Pennies.TEXT).convert(intPart, fractPart);
+            result = new MoneyToStr(Currency.PER10, lang, pennies).convert(intPart, fractPart);
         } else if (Double.valueOf(amount * NUM100).floatValue() == Double.valueOf(amount * NUM100).intValue()) {
             fractPart = Math.round((amount - intPart) * NUM100);
-            result = new MoneyToStr(Currency.PER100, lang, Pennies.TEXT).convert(intPart, fractPart);
+            result = new MoneyToStr(Currency.PER100, lang, pennies).convert(intPart, fractPart);
         } else if (Double.valueOf(amount * NUM1000).floatValue() == Double.valueOf(amount * NUM1000).intValue()) {
             fractPart = Math.round((amount - intPart) * NUM1000);
-            result = new MoneyToStr(Currency.PER1000, lang, Pennies.TEXT).convert(intPart, fractPart);
+            result = new MoneyToStr(Currency.PER1000, lang, pennies).convert(intPart, fractPart);
         } else {
             fractPart = Math.round((amount - intPart) * NUM10000);
-            result = new MoneyToStr(Currency.PER10000, lang, Pennies.TEXT).convert(intPart, fractPart);
+            result = new MoneyToStr(Currency.PER10000, lang, pennies).convert(intPart, fractPart);
         }
         return result;
     }
@@ -281,12 +430,11 @@ public class MoneyToStr {
         } while (intPart > 0);
 
         if (pennies == Pennies.TEXT) {
-            money2str.append(language == Language.ENG ? " and " : " ").append(theKopeiki == 0 ? messages.get("0")[0] + " "
-                : triad2Word(theKopeiki, 0L, kopSex));
+            money2str.append(language == Language.ENG ? " and " : " ").append(theKopeiki == 0 ? messages.get("0")[0] + " " : triad2Word(theKopeiki, 0L, kopSex));
         } else {
             money2str.append(" " + (theKopeiki < 10 ? "0" + theKopeiki : theKopeiki) + " ");
         }
-        if (theKopeiki == NUM11 || theKopeiki == NUM12) {
+        if (theKopeiki >= NUM11 && theKopeiki <= NUM14) {
             money2str.append(kopFiveUnit);
         } else {
             switch ((byte) (theKopeiki % NUM10)) {
@@ -422,5 +570,41 @@ public class MoneyToStr {
         T[] result = java.util.Arrays.copyOf(first, first.length + second.length);
         System.arraycopy(second, 0, result, first.length, second.length);
         return result;
+    }
+
+    public static void main(String[] args) {
+        String amount = "123.25";
+        String language = "ENG";
+        String currency = "USD";
+        String pennies = "TEXT";
+        if (args.length == 0) {
+            System.out.println("Usage: java -jar moneytostr.jar --amount=123.25 --language=rus|ukr|eng --currency=rur|uah|usd --pennies=text|number");
+        } else {
+            for (String arg : args) {
+                if (arg.startsWith("--amount=")) {
+                    amount = arg.substring(9).trim().replace(",", ".");
+                } else if (arg.startsWith("--language=")) {
+                    language = arg.substring(11).trim().toUpperCase();
+                } else if (arg.startsWith("--currency=")) {
+                    currency = arg.substring(11).trim().toUpperCase();
+                } else if (arg.startsWith("--pennies=")) {
+                    pennies = arg.substring(10).trim().toUpperCase();
+                }
+            }
+            String result = new MoneyToStr(Currency.valueOf(currency), Language.valueOf(language), Pennies.valueOf(pennies)).convert(Double.valueOf(amount));
+            System.out.println(result);
+        }
+    }
+    
+    public java.util.Map<String, String[]> getMessages() {
+        return messages;
+    }
+    
+    public String getRubShortUnit() {
+        return rubShortUnit;
+    }
+
+    public Language getLanguage() {
+        return language;
     }
 }
