@@ -6,7 +6,7 @@
     <groupId>com.github</groupId>
     <artifactId>xmltopdf</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version> 
+    <version>1.1</version> 
     <name>xmltopdf</name>
 
     <dependencies>
@@ -27,11 +27,11 @@
         <exclusions>
             <exclusion>
                 <groupId>bouncycastle</groupId>
-	        <artifactId>bcmail-jdk14</artifactId>
+            <artifactId>bcmail-jdk14</artifactId>
             </exclusion>
             <exclusion>
                 <groupId>bouncycastle</groupId>
-	        <artifactId>bcprov-jdk14</artifactId>
+            <artifactId>bcprov-jdk14</artifactId>
             </exclusion>
         </exclusions>
         </dependency>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+#macro( get $path )
+#if($xml.hasTag($path))$xml.getText($path)#else#end
+#end
+#macro( fio )
+#get("surname") #get("firstName") #get("middleName")
+#end
+#macro( regaddr )
+#get("regpostindex") #get("regprovince") обл.,
+ #get("regregion") район,
+ м. #get("regcity")
+#end
+#macro( mailaddr )
+#get("mailpostindex") #get("mailprovince") обл.,
+ #get("mailregion") район,
+ м. #get("mailcity")
+#end
+#macro( empladdr )
+#get("emplpostindex") #get("emplprovince") обл.,
+ #get("emplregion") район,
+ м. #get("emplcity")
+#end
+-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="application-form-ukr" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    <property name="ireport.zoom" value="1.5"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="487"/>
+    <style name="table">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 3">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 4">
+        <box>
+            <pen lineWidth="1.0" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <subDataset name="autodata"/>
+    <subDataset name="Table Dataset 1"/>
+    <subDataset name="Table Dataset 2"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="579" splitType="Stretch">
+            <staticText>
+                <reportElement mode="Transparent" x="0" y="26" width="555" height="20"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[АНКЕТА – ЗАЯВА КЛІЄНТА
+на надання споживчого кредиту
+]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Transparent" x="0" y="48" width="555" height="95"/>
+                <textElement markup="styled">
+                    <font fontName="Arial" size="8" isBold="false" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Я, <b>#fio()</b> прошу АТ «Банк» надати мені споживчий кредит на таких умовах:
+Строк користування кредитом <b>#get("duration")</b> міс. Сума кредиту <b>#moneyUAH("#get('amount_of_loan')") (#moneyToStrUAH("#get('amount_of_loan')")).</b> Перший внесок <b>#moneyUAH("#get('down_payment')") (#moneyToStrUAH("#get('down_payment')")).</b> Валюта кредиту <b>гривня.</b>
+Також, прошу АТ «Банк» надати мені додатковий кредит - Кредитну картку з наступними умовами (на умовах Кредитного договору):
+Максимальна сума ліміту додаткового кредиту <b>50 000,00</b> гривень.
+Максимальна процентна ставка за додатковим кредитом <b>40%</b> річних від фактично використаної суми додаткового кредиту.
+Строк дії ліміту кредитування <b>24</b> місяці (з можливістю подовження на новий строк за рішенням Банку).
+<i>Цим підписом я відмовляюсь від можливості отримання додаткового кредиту</i> _____________ (Підпис, <b>#fio()</b>)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="143" width="555" height="14" backcolor="#92D050"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Особисті відомості про клієнта]]></text>
+            </staticText>
+            <image>
+                <reportElement mode="Transparent" x="11" y="0" width="40" height="40"/>
+                <imageExpression class="java.lang.String"><![CDATA["image001.jpg"]]></imageExpression>
+            </image>
+            <staticText>
+                <reportElement mode="Transparent" x="1" y="157" width="565" height="123"/>
+                <textElement markup="styled">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Прізвище (латинськими буквами): <b>#ukrtolatin("#get('surname')")</b> Ім'я (латинськими буквами): <b>#ukrtolatin("#get('firstName')")</b>
+Прізвище, ім’я, по-батькові (російською мовою): <b>${in_person_fio_ru}</b>
+Прізвище, ім’я, по-батькові (українською мовою): ${in_person_fio}
+Чи змінював клієнт прізвище Ні Дата народження: #date(${in_person.birthday}) Місце народження: ${in_person.birth_place}
+ІПН ${in_person.tin} Дата видачі ІПН #date(${in_person.date_of_giving_tin_certificate}) Дата реєстрації ІПН #date(${in_person.date_of_issue_tin_certificate}) Ким виданий ІПН ${in_person.issuer_of_tin} Громадянство Українське Стать: #dictionary("gender", ${in_person.dictionary_gender})
+Паспорт: Серія, номер: ${in_person.identity_document_number} Дата видачі: #date(${in_person.date_of_issuing_identity_doc}) Виданий: ${in_person.issuer_of_identity_document}
+Адреса за реєстрацією (постійна): #regaddr($in_person)
+Адреса фактичного місця проживання: #mailaddr($in_person)
+Ситуація з житлом #dictionary("habitationSituation", ${in_person.dictionary_habitation_situation}) З якого часу #date(${in_person.habit_situation_start_date}) року. Сімейний стан: #dictionary("maritalStatus", ${in_person.dictionary_marital_status}) Кількість осіб на утриманні: ${in_person.number_of_children}
+Рівень освіти: #dictionary("levelOfEducation", ${in_person.dict_level_of_education})
+
+Наявність водійського посвідчення:Клієнт має водійське посвідчення]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="280" width="555" height="14" backcolor="#92D050"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Особисті відомості про дружину/чоловіка клієнта]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Transparent" x="0" y="294" width="555" height="72"/>
+                <textElement markup="styled">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Прізвище <b>${in_person_partner.last_name}</b> Ім'я та по-батькові <b>${in_person_partner.first_name} ${in_person_partner.patronymic_name}</b>
+Дата народження <b>#date(${in_person_partner.birthday})</b> Стать <b>#dictionary("gender", ${in_person_partner.dictionary_gender})</b> ІПН: <b>${in_person_partner.tin}</b>
+Громадянство Українське Дата реєстрації ІПН: <b>#date(${in_person_partner.date_of_issue_tin_certificate})</b> Дата видачі ІПН: <b>#date(${in_person_partner.date_of_giving_tin_certificate})</b> Ким виданий ІПН: <b>${in_person_partner.issuer_of_tin}</b>
+Тип документу Паспорт громадянина України Серія, номер <b>${in_person_partner.identity_document_number}</b> Дата видачі: <b>#date(${in_person_partner.date_of_issuing_identity_doc})</b> Виданий: <b>${in_person_partner.issuer_of_identity_document}</b>
+Рівень освіти <b>#dictionary("levelOfEducation", ${in_person_partner.dict_level_of_education})</b>]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="1" y="366" width="555" height="14" backcolor="#92D050"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Інформація про автомобіль]]></text>
+            </staticText>
+            <componentElement>
+                <reportElement key="table 4" style="table 4" mode="Opaque" x="1" y="380" width="554" height="68"/>
+                <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+                    <datasetRun subDataset="Table Dataset 2">
+                        <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
+                    </datasetRun>
+                    <jr:column width="104">
+                        <jr:tableHeader style="table 4_TH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="104" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[№]]></text>
+                            </staticText>
+                        </jr:tableHeader>
+                        <jr:detailCell style="table 4_TD" height="37" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="10" y="0" width="94" height="30"/>
+                                <textElement verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[1]]></text>
+                            </staticText>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="90">
+                        <jr:tableHeader style="table 4_TH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="90" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[Тип транспортного засобу]]></text>
+                            </staticText>
+                        </jr:tableHeader>
+                        <jr:detailCell style="table 4_TD" height="37" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="90" height="30"/>
+                                <textElement verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[Новий автомобіль]]></text>
+                            </staticText>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="90">
+                        <jr:tableHeader style="table 4_TH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="90" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[Марка автомобіля]]></text>
+                            </staticText>
+                        </jr:tableHeader>
+                        <jr:detailCell style="table 4_TD" height="37" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="90" height="30"/>
+                                <textElement verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[#dictionary("carBrand", ${in_goods.get(0).dictionary_carBrand})]]></text>
+                            </staticText>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="129">
+                        <jr:tableHeader style="table 4_TH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="129" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[Модель автомобіля]]></text>
+                            </staticText>
+                        </jr:tableHeader>
+                        <jr:detailCell style="table 4_TD" height="37" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="129" height="30"/>
+                                <textElement verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[#dictionary("carModel", ${in_goods.get(0).dictionary_carModel})]]></text>
+                            </staticText>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="140">
+                        <jr:tableHeader style="table 4_TH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="140" height="30"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[Ціна автомобіля]]></text>
+                            </staticText>
+                        </jr:tableHeader>
+                        <jr:detailCell style="table 4_TD" height="37" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Transparent" x="0" y="0" width="140" height="30"/>
+                                <textElement verticalAlignment="Middle">
+                                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                                </textElement>
+                                <text><![CDATA[#money(${in_goods.get(0).price})]]></text>
+                            </staticText>
+                        </jr:detailCell>
+                    </jr:column>
+                </jr:table>
+            </componentElement>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="448" width="555" height="14" backcolor="#92D050"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Інформація про страховку]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="499" width="555" height="14" backcolor="#92D050"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Інформація про трудову діяльність клієнта]]></text>
+            </staticText>
+        </band>
+    </title>
+    <pageFooter>
+        <band height="54" splitType="Stretch">
+            <staticText>
+                <reportElement mode="Transparent" x="0" y="0" width="556" height="54"/>
+                <textElement>
+                    <font fontName="Arial" size="8" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Своїм підписом клієнт підтверджує свою згоду на доступ Банку до його кредитної історії, збір, зберіганні, використання та розповсюдження через Бюро кредитних історій інформації про нього (в тому числі інформації, що міститься у державних реєстрах та інших базах даних публічного використання) у порядку, визначеному Законом України «Про організацію формування та обігу кредитних історій». Також своїм підписом клієнт підтверджує, що він проінформований Банком про те, що інформація про назву та адресу Бюро кредитних історій до яких АТ «Банк» буде передавати інформацію для формування кредитних історій.]]></text>
+            </staticText>
+        </band>
+    </pageFooter>
+</jasperReport>

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 Valentyn Kolesnikov
+ * Copyright 2012 Valentyn Kolesnikov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.util.Map;
  * @author Valentyn Kolesnikov
  * @version $Revision$ $Date$
  */
-public class UkrainianToLatin {
+public final class UkrainianToLatin {
     private static final int INDEX_0 = 0;
     private static final int INDEX_1 = 1;
     private static final int INDEX_2 = 2;
@@ -112,9 +112,6 @@ public class UkrainianToLatin {
             }
         }
     }
-    private UkrainianToLatin() {
-        super();
-    }
 
     /**
      * Generates latinic from cyrilic.
@@ -134,6 +131,8 @@ public class UkrainianToLatin {
                 if (" ".equals(curChar)) {
                     prevConvertCase = null;
                     result.append(' ');
+                } else if (curChar.matches("\\n")) {
+                    result.append(curChar);
                 }
                 continue;
             }
@@ -151,9 +150,10 @@ public class UkrainianToLatin {
     }
 
     /**
-     * @param result
-     * @param convertCase
-     * @param prevChar
+     * Converts first character in the word.
+     * @param result resut buffer to store string in latin
+     * @param convertCase current character object
+     * @param nextConvertCase next character object
      */
     private static void checkFirstChar(StringBuffer result, ConvertCase convertCase, ConvertCase nextConvertCase) {
         String latName = convertCase.getConvert().name();
@@ -183,9 +183,10 @@ public class UkrainianToLatin {
     }
 
     /**
-     * @param result
-     * @param convertCase
-     * @param prevChar
+     * Converts middle or last character in the word.
+     * @param result resut buffer to store string in latin
+     * @param convertCase current character object
+     * @param nextConvertCase next character object
      */
     private static void checkMiddleChar(StringBuffer result, ConvertCase convertCase, ConvertCase nextConvertCase) {
         String latName = convertCase.getConvert().name();
@@ -216,5 +217,11 @@ public class UkrainianToLatin {
         default:
             break;
         }
+    }
+
+    public static void main(String[] args) {
+        final String message = "The utility class to convert ukrainian words to the latin characters.\n\n"
+            + "For docs, license, tests, and downloads, see: https://github.com/javadev/ukrainiantolatin";
+        System.out.println(message);
     }
 }

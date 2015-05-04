@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <surname>Прізвище</surname>
+    <firstName>Ім'я</firstName>
+    <middleName>По батькові</middleName>
+    <duration>24</duration>
+    <amount_of_loan>85000</amount_of_loan>
+    <down_payment>15000</down_payment>
+</root>

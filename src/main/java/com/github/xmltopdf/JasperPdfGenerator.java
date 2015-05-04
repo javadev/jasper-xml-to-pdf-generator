@@ -25,11 +25,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 
 import com.mycila.xmltool.XMLDoc;
@@ -73,102 +75,118 @@ public class JasperPdfGenerator {
         DOCX, HTML, ODT, PDF, PNG, RTF, XLS;
     }
 
-    public JasperPdfGenerator() {
+    private final List<String> templateNames;
+    private final List<String> xmlFileNames;
+    private final List<DocType> docTypes;
+
+    public JasperPdfGenerator(List<String> templateNames, List<String> xmlFileNames, List<DocType> docTypes) {
+        this.templateNames = templateNames;
+        this.xmlFileNames = xmlFileNames;
+        this.docTypes = docTypes;
     }
 
     static {
         org.apache.log4j.BasicConfigurator.configure();
     }
 
-    private void createDocument(List<String> templateNames, List<String> xmlFileNames, ByteArrayOutputStream os, DocType docType) {
+    public List<Map.Entry<ByteArrayOutputStream, DocType>> createDocuments() {
+        final List<Map.Entry<ByteArrayOutputStream, DocType>> result = new ArrayList<Map.Entry<ByteArrayOutputStream, DocType>>();
+        for (final DocType docType : docTypes) {
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
+            try {
+                createDocument(os, docType);
+                result.add(new SimpleEntry(os, docType));
+            } catch (Exception ex) {
+                LOG.error(this, ex, ex.getMessage());
+            } finally {
+                IOUtils.closeQuietly(os);
+            }
+        }
+        return result;
+    }
+
+    public void createDocument(final ByteArrayOutputStream os, final DocType docType) throws Exception {
         List<JasperPrint> jasperPrints = new ArrayList<JasperPrint>();
         InputStream fileIs = null;
         InputStream stringIs = null;
         if (!xmlFileNames.isEmpty()) {
             xmlTag = XMLDoc.from(MergeXml.merge(xmlFileNames), true);
         }
-        try {
-            for (String templateName : templateNames) {
-                try {
-                    fileIs = new FileInputStream(templateNames.get(0));
-                    String contents = applyVelocityTemplate(IOUtils.toString(fileIs, "UTF-8"));
-                    stringIs = IOUtils.toInputStream(contents, "UTF-8");
-                    JasperReport jasperReport = JasperCompileManager.compileReport(stringIs);
-                    jasperPrints.add(JasperFillManager.fillReport(
-                        jasperReport, new HashMap(), new JREmptyDataSource()));
-                } finally {
-                    IOUtils.closeQuietly(fileIs);
-                    IOUtils.closeQuietly(stringIs);
-                }
+        for (String templateName : templateNames) {
+            try {
+                fileIs = new FileInputStream(templateNames.get(0));
+                String contents = applyVelocityTemplate(IOUtils.toString(fileIs, "UTF-8"));
+                stringIs = IOUtils.toInputStream(contents, "UTF-8");
+                JasperReport jasperReport = JasperCompileManager.compileReport(stringIs);
+                jasperPrints.add(JasperFillManager.fillReport(
+                    jasperReport, new HashMap(), new JREmptyDataSource()));
+            } finally {
+                IOUtils.closeQuietly(fileIs);
+                IOUtils.closeQuietly(stringIs);
             }
-            JasperPrint jasperPrint = jasperPrints.get(0);
-            for (int index = 1; index < jasperPrints.size(); index += 1) {
-                List<JRPrintPage> pages = jasperPrints.get(index).getPages();
-                for (JRPrintPage page : pages) {
-                    jasperPrint.addPage(page);
-                }
+        }
+        JasperPrint jasperPrint = jasperPrints.get(0);
+        for (int index = 1; index < jasperPrints.size(); index += 1) {
+            List<JRPrintPage> pages = jasperPrints.get(index).getPages();
+            for (JRPrintPage page : pages) {
+                jasperPrint.addPage(page);
             }
-            switch (docType) {
-                case PDF:
-                    JasperExportManager.exportReportToPdfStream(jasperPrint, os);
-                    break;
-                case RTF:
-                    JRRtfExporter rtfExporter = new JRRtfExporter();
-                    rtfExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                    rtfExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
-                    rtfExporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
-                    rtfExporter.exportReport();
-                    break;
-                case XLS:
-                    JRXlsExporter xlsExporter = new JRXlsExporter();
-                    xlsExporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
-                    xlsExporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, os);
-                    xlsExporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
-//                    xlsExporter.setParameter(JRXlsExporterParameter.IS_AUTO_DETECT_CELL_TYPE, Boolean.TRUE);
-                    xlsExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
-                    xlsExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-                    xlsExporter.exportReport();
-                    break;
-                case ODT:
-                    JROdtExporter odtExporter = new JROdtExporter();
-                    odtExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                    odtExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
-                    odtExporter.exportReport();
-                    break;
-                case PNG:
-                    BufferedImage pageImage = new BufferedImage((int) (jasperPrint.getPageWidth() * ZOOM_2X + 1),
-                        (int) (jasperPrint.getPageHeight() * ZOOM_2X + 1), BufferedImage.TYPE_INT_RGB);
-                    JRGraphics2DExporter exporter = new JRGraphics2DExporter();
-                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                    exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, pageImage.getGraphics());
-                    exporter.setParameter(JRGraphics2DExporterParameter.ZOOM_RATIO, ZOOM_2X);
-                    exporter.setParameter(JRExporterParameter.PAGE_INDEX, Integer.valueOf(0));
-                    exporter.exportReport();
-                    ImageIO.write(pageImage, "png", os);
-                    break;
-                case HTML:
-                    JRHtmlExporter htmlExporter = new JRHtmlExporter();
-                    htmlExporter.setParameter(JRHtmlExporterParameter.JASPER_PRINT, jasperPrint);
-                    htmlExporter.setParameter(JRHtmlExporterParameter.OUTPUT_STREAM, os);
-                    htmlExporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "img/");
-                    htmlExporter.setParameter(JRHtmlExporterParameter.IMAGES_DIR, new java.io.File("img"));
-                    htmlExporter.setParameter(JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR, Boolean.TRUE);
-                    htmlExporter.setParameter(JRHtmlExporterParameter.ZOOM_RATIO, ZOOM_2X);
-                    htmlExporter.exportReport();
-                    break;
-                case DOCX:
-                    JRDocxExporter docxExporter = new JRDocxExporter();
-                    docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                    docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
-                    docxExporter.exportReport();
-                    break;
-                default:
-                    break;
-            }
-        } catch (Exception ex) {
-            LOG.error(this, ex, ex.getMessage());
-        } finally {
-            IOUtils.closeQuietly(os);
+        }
+        switch (docType) {
+            case PDF:
+                JasperExportManager.exportReportToPdfStream(jasperPrint, os);
+                break;
+            case RTF:
+                JRRtfExporter rtfExporter = new JRRtfExporter();
+                rtfExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                rtfExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                rtfExporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+                rtfExporter.exportReport();
+                break;
+            case XLS:
+                JRXlsExporter xlsExporter = new JRXlsExporter();
+                xlsExporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+                xlsExporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, os);
+                xlsExporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
+                xlsExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+                xlsExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+                xlsExporter.exportReport();
+                break;
+            case ODT:
+                JROdtExporter odtExporter = new JROdtExporter();
+                odtExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                odtExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                odtExporter.exportReport();
+                break;
+            case PNG:
+                BufferedImage pageImage = new BufferedImage((int) (jasperPrint.getPageWidth() * ZOOM_2X + 1),
+                    (int) (jasperPrint.getPageHeight() * ZOOM_2X + 1), BufferedImage.TYPE_INT_RGB);
+                JRGraphics2DExporter exporter = new JRGraphics2DExporter();
+                exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, pageImage.getGraphics());
+                exporter.setParameter(JRGraphics2DExporterParameter.ZOOM_RATIO, ZOOM_2X);
+                exporter.setParameter(JRExporterParameter.PAGE_INDEX, Integer.valueOf(0));
+                exporter.exportReport();
+                ImageIO.write(pageImage, "png", os);
+                break;
+            case HTML:
+                JRHtmlExporter htmlExporter = new JRHtmlExporter();
+                htmlExporter.setParameter(JRHtmlExporterParameter.JASPER_PRINT, jasperPrint);
+                htmlExporter.setParameter(JRHtmlExporterParameter.OUTPUT_STREAM, os);
+                htmlExporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "img/");
+                htmlExporter.setParameter(JRHtmlExporterParameter.IMAGES_DIR, new java.io.File("img"));
+                htmlExporter.setParameter(JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR, Boolean.TRUE);
+                htmlExporter.setParameter(JRHtmlExporterParameter.ZOOM_RATIO, ZOOM_2X);
+                htmlExporter.exportReport();
+                break;
+            case DOCX:
+                JRDocxExporter docxExporter = new JRDocxExporter();
+                docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                docxExporter.exportReport();
+                break;
+            default:
+                break;
         }
     }
 
@@ -225,12 +243,15 @@ public class JasperPdfGenerator {
         if (types.isEmpty()) {
             types.add("PDF");
         }
-        for (String type : types) {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+        final List<DocType> docTypes = new ArrayList<DocType>();
+        for (final String type : types) {
             if (DocType.valueOf(type) != null) {
-                new JasperPdfGenerator().createDocument(templates, xmls, os, DocType.valueOf(type));
-                os.writeTo(new FileOutputStream(templates.get(0).replaceFirst("\\.jrxml$", "." + type.toLowerCase())));
+                docTypes.add(DocType.valueOf(type));
             }
+        }
+        final List<Map.Entry<ByteArrayOutputStream, DocType>> documents = new JasperPdfGenerator(templates, xmls, docTypes).createDocuments();
+        for (final Map.Entry<ByteArrayOutputStream, DocType> entry : documents) {
+            entry.getKey().writeTo(new FileOutputStream(templates.get(0).replaceFirst("\\.jrxml$", "." + entry.getValue().name().toLowerCase())));
         }
     }
 }
