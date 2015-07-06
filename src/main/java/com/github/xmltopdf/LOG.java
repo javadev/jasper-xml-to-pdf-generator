@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 Valentyn Kolesnikov
+ * Copyright 2015 Valentyn Kolesnikov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,46 +27,41 @@ import org.slf4j.LoggerFactory;
 public class LOG {
     private enum MessageType { DEBUG, INFO, WARN, ERROR };
 
-    public static void debug(String aParam) {
-        debug(null, aParam);
+    public static void debug(String param) {
+        log(MessageType.DEBUG, param);
     }
 
-    public static void debug(Object obj, String param) {
-        log(MessageType.DEBUG, obj, param);
+    public static void error(String param) {
+        log(MessageType.ERROR, param);
     }
 
-    public static void error(Object obj, String param) {
-        log(MessageType.ERROR, obj, param);
-    }
-
-    public static void error(Object obj, Throwable aProblem, String param) {
-        log(MessageType.ERROR, obj, problem2String(param, aProblem));
+    public static void error(Throwable aProblem, String param) {
+        log(MessageType.ERROR, problem2String(param, aProblem));
      }
 
-    public static void info(Object obj, String param) {
-        log(MessageType.INFO, obj, param);
+    public static void info(String param) {
+        log(MessageType.INFO, param);
     }
 
-    public static void warn(Object obj, String param) {
-        log(MessageType.WARN, obj, param);
+    public static void warn(String param) {
+        log(MessageType.WARN, param);
     }
 
-    public static void warn(Object aObj, Throwable aProblem, String param) {
-        warn(aObj, problem2String(param, aProblem));
+    public static void warn(Throwable aProblem, String param) {
+        warn(problem2String(param, aProblem));
     }
 
-    private static void log(MessageType messageType, Object obj, String localParam) {
-        String aClassName = getLoggerName(obj == null ? whoCalledMe() : obj);
+    private static void log(MessageType messageType, String localParam) {
+        String aClassName = whoCalledMe();
         Logger log = LoggerFactory.getLogger(aClassName);
-        String param = modifyString(localParam);
         if (MessageType.DEBUG.equals(messageType)) {
-            log.debug(param);
+            log.debug(localParam);
         } else if (MessageType.INFO.equals(messageType)) {
-            log.info(param);
+            log.info(localParam);
         } else if (MessageType.WARN.equals(messageType)) {
-            log.warn(param);
+            log.warn(localParam);
         } else {
-            log.error(param);
+            log.error(localParam);
         }
     }
 
@@ -95,29 +90,9 @@ public class LOG {
         return sb.toString();
     }
 
-    public static String modifyString(String param) {
-         if (null == param && "".equals(param)) {
-             return "";
-         }
-         return param;
-     }
-
-    private static String getLoggerName(Object aObj) {
-        if (aObj == null) {
-            return LOG.class.getName();
-        }
-        if (aObj instanceof String) {
-            return (String) aObj;
-        }
-        if (aObj instanceof Class) {
-            return ((Class) aObj).getName();
-        }
-        return aObj.getClass().getName();
-    }
-
     private static void makeGoodTrace(StringBuilder sb, StackTraceElement[] trace) {
         for (StackTraceElement entry : trace) {
-            if (entry.getClassName().startsWith("org.bitbucket")) {
+            if (entry.getClassName().startsWith("com.github")) {
                 sb.append("\t-->");
             } else {
                 sb.append('\t');

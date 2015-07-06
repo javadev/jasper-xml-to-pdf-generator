@@ -97,7 +97,7 @@ public class JasperPdfGenerator {
                 createDocument(os, docType);
                 result.add(new SimpleEntry(os, docType));
             } catch (Exception ex) {
-                LOG.error(this, ex, ex.getMessage());
+                LOG.error(ex, ex.getMessage());
             } finally {
                 IOUtils.closeQuietly(os);
             }
@@ -221,7 +221,7 @@ public class JasperPdfGenerator {
      */
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-           LOG.info(null, USAGE);
+           LOG.info(USAGE);
            return;
         }
         List<String> templates = new ArrayList<String>();
@@ -237,7 +237,7 @@ public class JasperPdfGenerator {
             }
         }
         if (templates.isEmpty()) {
-           LOG.info(null, USAGE);
+           LOG.info(USAGE);
            return;
         }
         if (types.isEmpty()) {

@@ -1,6 +1,7 @@
 jasper-xml-to-pdf-generator
 ===========================
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.javadev/xmltopdf.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.javadev%22%20AND%20a%3A%22xmltopdf%22)
 [![Build Status](https://secure.travis-ci.org/javadev/jasper-xml-to-pdf-generator.png)](https://travis-ci.org/javadev/jasper-xml-to-pdf-generator)
 [![Coverage Status](https://coveralls.io/repos/javadev/jasper-xml-to-pdf-generator/badge.png?branch=master)](https://coveralls.io/r/javadev/jasper-xml-to-pdf-generator)
 
