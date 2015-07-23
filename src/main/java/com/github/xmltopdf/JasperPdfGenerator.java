@@ -59,20 +59,21 @@ import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRPptxExporter;
 
 /**.
  * @author Valentyn Kolesnikov
  * @version $Revision$ $Date$
  */
 public class JasperPdfGenerator {
-    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml [--doctype=docx|html|odt|pdf|png|rtf|xls]";
+    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml [--doctype=docx|html|odt|pdf|png|pptx|rtf|xls]";
     private static final String DOC_TYPE = "--doctype=";
     private static final Float ZOOM_2X = Float.valueOf(2);
     private XMLTag xmlTag;
 
     /**.*/
     public enum DocType {
-        DOCX, HTML, ODT, PDF, PNG, RTF, XLS;
+        DOCX, HTML, ODT, PDF, PNG, RTF, XLS, PPTX;
     }
 
     private final List<String> templateNames;
@@ -184,6 +185,12 @@ public class JasperPdfGenerator {
                 docxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
                 docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
                 docxExporter.exportReport();
+                break;
+            case PPTX:
+                JRPptxExporter pptxExporter = new JRPptxExporter();
+                pptxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                pptxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+                pptxExporter.exportReport();
                 break;
             default:
                 break;

@@ -48,7 +48,8 @@ public class JasperPdfGeneratorTest {
             Arrays.asList("src/test/resources/application-form-ukr.jrxml"),
             Arrays.asList("src/test/resources/in_dossier.xml"),
             Arrays.asList(JasperPdfGenerator.DocType.HTML, JasperPdfGenerator.DocType.DOCX, JasperPdfGenerator.DocType.ODT,
-                JasperPdfGenerator.DocType.PDF, JasperPdfGenerator.DocType.PNG, JasperPdfGenerator.DocType.RTF, JasperPdfGenerator.DocType.XLS));
+                JasperPdfGenerator.DocType.PDF, JasperPdfGenerator.DocType.PNG, JasperPdfGenerator.DocType.PPTX,
+                JasperPdfGenerator.DocType.RTF, JasperPdfGenerator.DocType.XLS));
     }
 
     @Test
