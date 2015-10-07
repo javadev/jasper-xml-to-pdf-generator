@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 Valentyn Kolesnikov
+ * Copyright 2015 Valentyn Kolesnikov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,20 +60,21 @@ import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRPptxExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 
 /**.
  * @author Valentyn Kolesnikov
  * @version $Revision$ $Date$
  */
 public class JasperPdfGenerator {
-    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml [--doctype=docx|html|odt|pdf|png|pptx|rtf|xls]";
+    private static final String USAGE = "Usage: java -jar xmltopdf.jar template.jrxml data.xml [--doctype=docx|html|odt|pdf|png|pptx|rtf|xls|xlsx]";
     private static final String DOC_TYPE = "--doctype=";
     private static final Float ZOOM_2X = Float.valueOf(2);
     private XMLTag xmlTag;
 
     /**.*/
     public enum DocType {
-        DOCX, HTML, ODT, PDF, PNG, RTF, XLS, PPTX;
+        DOCX, HTML, ODT, PDF, PNG, RTF, XLS, PPTX, XLSX;
     }
 
     private final List<String> templateNames;
@@ -152,6 +153,12 @@ public class JasperPdfGenerator {
                 xlsExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
                 xlsExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
                 xlsExporter.exportReport();
+                break;
+            case XLSX:
+                JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+                xlsxExporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+                xlsxExporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, os);
+                xlsxExporter.exportReport();
                 break;
             case ODT:
                 JROdtExporter odtExporter = new JROdtExporter();
