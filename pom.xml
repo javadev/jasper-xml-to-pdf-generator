@@ -13,7 +13,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.0.1</version>
+            <version>2.5</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.4</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -74,7 +74,7 @@
         <plugins>
           <plugin>
               <artifactId>maven-compiler-plugin</artifactId>
-              <version>2.3.2</version>
+              <version>3.5.1</version>
               <configuration>
                   <debug>true</debug>
                   <source>1.5</source>
@@ -85,7 +85,7 @@
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-jar-plugin</artifactId>
-              <version>2.4</version>
+              <version>3.0.2</version>
               <configuration>
                   <archive>
                       <manifest>
@@ -99,7 +99,7 @@
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-dependency-plugin</artifactId>
-              <version>2.5.1</version>
+              <version>2.10</version>
               <executions>
                   <execution>
                       <id>copy-dependencies</id>
@@ -118,7 +118,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>1.1</version>
+        <version>1.5.0</version>
         <executions>
           <execution>
             <goals>
@@ -141,7 +141,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.0.201403182114</version>
+        <version>0.7.7.201606060606</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -154,7 +154,7 @@
       <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.3</version>
+          <version>3.5.1</version>
           <configuration>
             <reportPlugins>
       <plugin>
