@@ -9,6 +9,13 @@
     <version>1.1</version> 
     <name>xmltopdf</name>
 
+    <repositories>
+        <repository>
+            <id>jasperreports</id>
+            <url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>commons-io</groupId>
@@ -46,8 +53,8 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
             <version>[2.17.1,)</version>
         </dependency>
         <dependency>
