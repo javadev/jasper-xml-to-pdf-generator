@@ -221,7 +221,7 @@
     </reporting>
 
     <properties>
-        <slf4j.version>1.7.33</slf4j.version>        
+        <slf4j.version>2.0.17</slf4j.version>        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
